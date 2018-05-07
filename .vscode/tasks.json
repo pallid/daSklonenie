@@ -1,0 +1,32 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "type": "process",
+            "taskName": "1testrunner: Testing project",
+            "problemMatcher": [
+                "$OneScript Linter"
+            ],
+            "windows": {
+                "command": "cmd",
+                "args": [
+                    "/c",
+                    "1testrunner",
+                    "-runall",
+                    "${workspaceRoot}/tests"
+                ]
+            },
+            "linux": {
+                "command": "sh",
+                "args": [
+                    "-c",
+                    "1testrunner",
+                    "-runall",
+                    "${workspaceRoot}/tests"
+                ]
+            }
+        }
+    ]
+}
