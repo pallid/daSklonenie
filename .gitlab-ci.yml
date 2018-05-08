@@ -1,0 +1,10 @@
+image: "evilbeaver/onescript:latest"
+
+stages:
+  - test
+ 
+test:
+  stage: test
+  script: 
+  - opm install 1testrunner
+  - 1testrunner -runall ./tests
