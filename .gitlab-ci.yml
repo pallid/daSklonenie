@@ -25,6 +25,8 @@ deploy:
   stage: deploy
   variables:
     GIT_STRATEGY: none
+  script:
+  - echo "deploy"
   artifacts:
     name: "daSklonenie-$CI_COMMIT_REF_NAME"
     paths:
