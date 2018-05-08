@@ -8,10 +8,13 @@ stages:
 build:
   stage: build
   script: 
-  - grep '%ver' -P -R -I -l  * | xargs sed -i 's/%ver/$CI_COMMIT_REF_NAME/g' 
+  - grep '%ver' -P -R -I -l  packagedef | xargs sed -i 's/%ver/$CI_COMMIT_REF_NAME/g' 
   - mkdir ./build
   - opm build . -out ./build
   - opm install ./build/daSklonenie-$CI_COMMIT_REF_NAME.ospx
+  artifacts:
+    paths:
+    - build/
 
 test:
   stage: test
@@ -28,6 +31,6 @@ deploy:
   script:
   - echo "deploy"
   artifacts:
-    name: "daSklonenie-$CI_COMMIT_REF_NAME"
+    name: "daSklonenie-$CI_COMMIT_REF_NAME.ospx"
     paths:
     - build/
