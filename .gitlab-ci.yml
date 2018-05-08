@@ -27,7 +27,7 @@ build:
   only:
     - tags
 
-test:
+test-master:
   stage: test
   script:
   - grep '#Использовать ".."' -P -R -I -l ./tests/Тесты_daСклонение.os | xargs sed -i 's/#Использовать ".."/#Использовать daSklonenie/g' 
