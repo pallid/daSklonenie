@@ -1,10 +1,51 @@
 image: "evilbeaver/onescript:latest"
 
 stages:
+  - build
   - test
- 
+  - deploy
+  
 test:
   stage: test
   script: 
   - opm install 1testrunner
   - 1testrunner -runall ./tests
+  except:
+    - master
+    - tags
+ 
+build:
+  stage: build
+  script: 
+  - grep '%ver' -P -R -I -l packagedef | xargs sed -i 's/%ver/'$CI_COMMIT_REF_NAME'/g' 
+  - mkdir ./build
+  - opm build . -out ./build
+  artifacts:
+    paths:
+    - build/*.ospx
+    expire_in: 1 day
+  only:
+    - tags
+
+test-master:
+  stage: test
+  script:
+  - grep '#Использовать ".."' -P -R -I -l ./tests/Тесты_daСклонение.os | xargs sed -i 's/#Использовать ".."/#Использовать daSklonenie/g' 
+  - opm install -f ./build/daSklonenie-$CI_COMMIT_REF_NAME.ospx
+  - opm install 1testrunner
+  - 1testrunner -runall ./tests
+  only:
+    - tags 
+
+daSklonenie:
+  stage: deploy
+  variables:
+    GIT_STRATEGY: none
+  script:
+  - mv ./build/daSklonenie-$CI_COMMIT_REF_NAME.ospx ./daSklonenie-$CI_COMMIT_REF_NAME.ospx
+  artifacts:
+    name: "daSklonenie-$CI_COMMIT_REF_NAME"
+    paths:
+    - daSklonenie-$CI_COMMIT_REF_NAME.ospx
+  only:
+    - tags  
